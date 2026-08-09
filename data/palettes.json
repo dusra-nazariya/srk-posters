@@ -96,18 +96,6 @@
     ]
   },
   {
-    "title": "Pehla Nasha",
-    "year": "1993",
-    "poster": "1993_Pehla Nasha.jpg",
-    "palette": [
-      "#2b2620",
-      "#423531",
-      "#f1e8c1",
-      "#6a442f",
-      "#7f664d"
-    ]
-  },
-  {
     "title": "Anjaam",
     "year": "1994",
     "poster": "1994_Anjaam.jpg",
@@ -276,18 +264,6 @@
     ]
   },
   {
-    "title": "Gudgudee",
-    "year": "1997",
-    "poster": "1997_Gudgudee.jpg",
-    "palette": [
-      "#f4f1ef",
-      "#dedadd",
-      "#d2c3c1",
-      "#db988e",
-      "#b86357"
-    ]
-  },
-  {
     "title": "Koyla",
     "year": "1997",
     "poster": "1997_Koyla.jpg",
@@ -321,18 +297,6 @@
       "#202113",
       "#393420",
       "#baa88c"
-    ]
-  },
-  {
-    "title": "Achanak",
-    "year": "1998",
-    "poster": "1998_Achanak.jpg",
-    "palette": [
-      "#3c353a",
-      "#f9f6f0",
-      "#594d52",
-      "#bc7a62",
-      "#777481"
     ]
   },
   {
@@ -384,30 +348,6 @@
     ]
   },
   {
-    "title": "Gaja Gamini",
-    "year": "2000",
-    "poster": "2000_Gaja Gamini.jpg",
-    "palette": [
-      "#4a342d",
-      "#ede4d8",
-      "#71544c",
-      "#271716",
-      "#e89165"
-    ]
-  },
-  {
-    "title": "Har Dil Jo Pyar Karega",
-    "year": "2000",
-    "poster": "2000_Har Dil Jo Pyar Karega.jpg",
-    "palette": [
-      "#fafafa",
-      "#ebe0eb",
-      "#e959a7",
-      "#332924",
-      "#d3894d"
-    ]
-  },
-  {
     "title": "Hey Ram",
     "year": "2000",
     "poster": "2000_Hey Ram.jpg",
@@ -456,9 +396,9 @@
     ]
   },
   {
-    "title": "A\u015boka",
+    "title": "Aśoka",
     "year": "2001",
-    "poster": "2001_A\u015boka.jpg",
+    "poster": "2001_Aśoka.jpg",
     "palette": [
       "#f5f6f4",
       "#f6ac2e",
@@ -513,18 +453,6 @@
       "#3f3130",
       "#dca485",
       "#c48567"
-    ]
-  },
-  {
-    "title": "Saathiya",
-    "year": "2002",
-    "poster": "2002_Saathiya.jpg",
-    "palette": [
-      "#b42c2d",
-      "#ec4a33",
-      "#2c1e19",
-      "#f07433",
-      "#f5a13a"
     ]
   },
   {
@@ -612,30 +540,6 @@
     ]
   },
   {
-    "title": "Kaal",
-    "year": "2005",
-    "poster": "2005_Kaal.jpg",
-    "palette": [
-      "#030a0d",
-      "#121b16",
-      "#222e22",
-      "#f5f9f6",
-      "#3a4735"
-    ]
-  },
-  {
-    "title": "Kuchh Meetha Ho Jaye",
-    "year": "2005",
-    "poster": "2005_Kuchh Meetha Ho Jaye.jpg",
-    "palette": [
-      "#81a9b0",
-      "#5a8184",
-      "#b27e64",
-      "#50514d",
-      "#b8262e"
-    ]
-  },
-  {
     "title": "Paheli",
     "year": "2005",
     "poster": "2005_Paheli.jpg",
@@ -648,30 +552,6 @@
     ]
   },
   {
-    "title": "Silsiilay",
-    "year": "2005",
-    "poster": "2005_Silsiilay.jpg",
-    "palette": [
-      "#f8f9f4",
-      "#9c5839",
-      "#dfc7bf",
-      "#793e2d",
-      "#fae46a"
-    ]
-  },
-  {
-    "title": "Alag",
-    "year": "2006",
-    "poster": "2006_Alag.jpg",
-    "palette": [
-      "#000204",
-      "#081923",
-      "#122e3b",
-      "#377686",
-      "#204653"
-    ]
-  },
-  {
     "title": "Don  The Chase Begins Again",
     "year": "2006",
     "poster": "2006_Don_ The Chase Begins Again.jpg",
@@ -681,18 +561,6 @@
       "#4f5533",
       "#606e43",
       "#70884f"
-    ]
-  },
-  {
-    "title": "I See You",
-    "year": "2006",
-    "poster": "2006_I See You.jpg",
-    "palette": [
-      "#0e0706",
-      "#b7a186",
-      "#d3bfa6",
-      "#a08567",
-      "#eef1f0"
     ]
   },
   {
@@ -720,18 +588,6 @@
     ]
   },
   {
-    "title": "Heyy Babyy",
-    "year": "2007",
-    "poster": "2007_Heyy Babyy.jpg",
-    "palette": [
-      "#efeeec",
-      "#b5a09a",
-      "#d5cac4",
-      "#e7df8d",
-      "#cd733c"
-    ]
-  },
-  {
     "title": "Om Shanti Om",
     "year": "2007",
     "poster": "2007_Om Shanti Om.jpg",
@@ -741,42 +597,6 @@
       "#581617",
       "#84201a",
       "#c32c20"
-    ]
-  },
-  {
-    "title": "Bhoothnath",
-    "year": "2008",
-    "poster": "2008_Bhoothnath.jpg",
-    "palette": [
-      "#090711",
-      "#105a97",
-      "#3670a9",
-      "#936262",
-      "#be847b"
-    ]
-  },
-  {
-    "title": "Kismat Konnection",
-    "year": "2008",
-    "poster": "2008_Kismat Konnection.jpg",
-    "palette": [
-      "#5f492a",
-      "#1b0f10",
-      "#9d6e57",
-      "#511e12",
-      "#9c1e0f"
-    ]
-  },
-  {
-    "title": "Krazzy 4",
-    "year": "2008",
-    "poster": "2008_Krazzy 4.jpg",
-    "palette": [
-      "#cae1e3",
-      "#f0f8f6",
-      "#b4c7c5",
-      "#9d9d91",
-      "#5e5550"
     ]
   },
   {
@@ -792,18 +612,6 @@
     ]
   },
   {
-    "title": "Shaurya",
-    "year": "2008",
-    "poster": "2008_Shaurya.jpg",
-    "palette": [
-      "#fcfcfc",
-      "#160f1d",
-      "#2d2631",
-      "#e0d3d0",
-      "#463d43"
-    ]
-  },
-  {
     "title": "Billu",
     "year": "2009",
     "poster": "2009_Billu.jpg",
@@ -813,18 +621,6 @@
       "#4c3121",
       "#edb885",
       "#f1e5c5"
-    ]
-  },
-  {
-    "title": "Luck by Chance",
-    "year": "2009",
-    "poster": "2009_Luck by Chance.jpg",
-    "palette": [
-      "#fafafa",
-      "#1a1614",
-      "#bc8778",
-      "#563227",
-      "#a33a32"
     ]
   },
   {
@@ -852,18 +648,6 @@
     ]
   },
   {
-    "title": "Love Breakups Zindagi",
-    "year": "2010",
-    "poster": "2010_Love Breakups Zindagi.jpg",
-    "palette": [
-      "#f5f8f7",
-      "#e1ddd6",
-      "#1c1414",
-      "#cbb6b3",
-      "#41312d"
-    ]
-  },
-  {
     "title": "My Name Is Khan",
     "year": "2010",
     "poster": "2010_My Name Is Khan.jpg",
@@ -888,18 +672,6 @@
     ]
   },
   {
-    "title": "Shahrukh Bola  Khoobsurat Hai Tu ",
-    "year": "2010",
-    "poster": "2010_Shahrukh Bola _Khoobsurat Hai Tu_.jpg",
-    "palette": [
-      "#f2f6f7",
-      "#c4e6f9",
-      "#938371",
-      "#f6d0b1",
-      "#6b5c4e"
-    ]
-  },
-  {
     "title": "Jab Tak Hai Jaan",
     "year": "2012",
     "poster": "2012_Jab Tak Hai Jaan.jpg",
@@ -912,18 +684,6 @@
     ]
   },
   {
-    "title": "Bombay Talkies",
-    "year": "2013",
-    "poster": "2013_Bombay Talkies.jpg",
-    "palette": [
-      "#150409",
-      "#351718",
-      "#5d2c1b",
-      "#b89055",
-      "#6c6340"
-    ]
-  },
-  {
     "title": "Chennai Express",
     "year": "2013",
     "poster": "2013_Chennai Express.jpg",
@@ -933,18 +693,6 @@
       "#c89e43",
       "#9d854c",
       "#402e1a"
-    ]
-  },
-  {
-    "title": "Bhoothnath Returns",
-    "year": "2014",
-    "poster": "2014_Bhoothnath Returns.jpg",
-    "palette": [
-      "#a5c1b5",
-      "#7d847d",
-      "#9ea094",
-      "#d7e3d4",
-      "#636b65"
     ]
   },
   {
@@ -969,18 +717,6 @@
       "#4b2b26",
       "#ba896e",
       "#d6b294"
-    ]
-  },
-  {
-    "title": "Ae Dil Hai Mushkil",
-    "year": "2016",
-    "poster": "2016_Ae Dil Hai Mushkil.jpg",
-    "palette": [
-      "#371314",
-      "#1e0506",
-      "#51231f",
-      "#8e5a4c",
-      "#a77a6d"
     ]
   },
   {
@@ -1032,18 +768,6 @@
     ]
   },
   {
-    "title": "Tubelight",
-    "year": "2017",
-    "poster": "2017_Tubelight.jpg",
-    "palette": [
-      "#605643",
-      "#776b57",
-      "#483f2f",
-      "#998565",
-      "#d1cfbd"
-    ]
-  },
-  {
     "title": "Zero",
     "year": "2018",
     "poster": "2018_Zero.jpg",
@@ -1053,54 +777,6 @@
       "#655645",
       "#26241d",
       "#7c6c59"
-    ]
-  },
-  {
-    "title": "The Zoya Factor",
-    "year": "2019",
-    "poster": "2019_The Zoya Factor.jpg",
-    "palette": [
-      "#162431",
-      "#333f46",
-      "#366080",
-      "#6a879d",
-      "#a88a6d"
-    ]
-  },
-  {
-    "title": "Brahm\u0101stra  Part One \u2013 Shiva",
-    "year": "2022",
-    "poster": "2022_Brahm\u0101stra_ Part One \u2013 Shiva.jpg",
-    "palette": [
-      "#ac6025",
-      "#ca8137",
-      "#844c22",
-      "#dea95b",
-      "#2e1e14"
-    ]
-  },
-  {
-    "title": "Laal Singh Chaddha",
-    "year": "2022",
-    "poster": "2022_Laal Singh Chaddha.jpg",
-    "palette": [
-      "#d9e6f8",
-      "#d1ccd7",
-      "#baadba",
-      "#a4c9f1",
-      "#a18d9c"
-    ]
-  },
-  {
-    "title": "Rocketry  The Nambi Effect",
-    "year": "2022",
-    "poster": "2022_Rocketry_ The Nambi Effect.jpg",
-    "palette": [
-      "#0d0202",
-      "#300a0a",
-      "#58110d",
-      "#8a2516",
-      "#db9c7e"
     ]
   },
   {
@@ -1137,18 +813,6 @@
       "#130f10",
       "#e4e0d0",
       "#3b2d2e"
-    ]
-  },
-  {
-    "title": "Tiger 3",
-    "year": "2023",
-    "poster": "2023_Tiger 3.jpg",
-    "palette": [
-      "#1b4d4f",
-      "#123032",
-      "#0a1216",
-      "#1f6f6f",
-      "#d9d9c7"
     ]
   },
   {
