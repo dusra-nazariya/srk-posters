@@ -1,0 +1,1015 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SRK Poster Color Palette Evolution</title>
+<script src="https://d3js.org/d3.v7.min.js"></script>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: #0a0a0f;
+    color: #e0e0e0;
+    font-family: 'Inter', sans-serif;
+    overflow-x: hidden;
+  }
+
+  .hero {
+    text-align: center;
+    padding: 80px 20px 40px;
+    background: linear-gradient(180deg, #0a0a0f 0%, #111118 100%);
+  }
+
+  .hero h1 {
+    font-size: 3rem;
+    font-weight: 700;
+    background: linear-gradient(135deg, #ff6b6b, #ffa07a, #ffd700, #98fb98, #87ceeb, #dda0dd);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 8px;
+  }
+
+  .hero .subtitle {
+    font-size: 1.1rem;
+    color: #888;
+    font-weight: 300;
+  }
+
+  .section {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 40px 20px;
+  }
+
+  .section-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: #fff;
+  }
+
+  .section-desc {
+    font-size: 0.9rem;
+    color: #666;
+    margin-bottom: 24px;
+  }
+
+  /* Stats bar */
+  .stats-bar {
+    display: flex;
+    justify-content: center;
+    gap: 48px;
+    padding: 24px 20px;
+    flex-wrap: wrap;
+  }
+
+  .stat {
+    text-align: center;
+  }
+
+  .stat .num {
+    font-size: 2.2rem;
+    font-weight: 700;
+    color: #fff;
+  }
+
+  .stat .label {
+    font-size: 0.75rem;
+    color: #666;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  /* Timeline strip */
+  #timeline-strip {
+    width: 100%;
+    overflow-x: auto;
+    padding: 20px 0;
+  }
+
+  #timeline-strip svg {
+    display: block;
+  }
+
+  /* Charts */
+  .chart-container {
+    background: #111118;
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 32px;
+    border: 1px solid #1a1a24;
+  }
+
+  /* Poster grid */
+  .poster-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 12px;
+  }
+
+  .poster-card {
+    background: #111118;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid #1a1a24;
+    transition: transform 0.2s, border-color 0.2s;
+    cursor: pointer;
+  }
+
+  .poster-card:hover {
+    transform: translateY(-4px);
+    border-color: #333;
+  }
+
+  .poster-thumb {
+    width: 100%;
+    height: 100px;
+    object-fit: cover;
+    display: block;
+    background: #0a0a0f;
+  }
+
+  .poster-palette {
+    display: flex;
+    height: 32px;
+  }
+
+  .poster-palette div {
+    flex: 1;
+  }
+
+  .poster-info {
+    padding: 8px 10px;
+  }
+
+  .poster-info .year {
+    font-size: 0.7rem;
+    color: #555;
+  }
+
+  .poster-info .title {
+    font-size: 0.75rem;
+    color: #ccc;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  /* Card actions */
+  .card-actions {
+    display: flex;
+    border-top: 1px solid #1a1a24;
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+
+  .poster-card:hover .card-actions {
+    opacity: 1;
+  }
+
+  .card-actions button {
+    flex: 1;
+    background: none;
+    border: none;
+    color: #666;
+    font-size: 0.7rem;
+    padding: 6px 0;
+    cursor: pointer;
+    font-family: 'Inter', sans-serif;
+    transition: color 0.15s, background 0.15s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+  }
+
+  .card-actions button:hover {
+    color: #fff;
+    background: #1a1a24;
+  }
+
+  .card-actions button svg {
+    width: 12px;
+    height: 12px;
+    fill: currentColor;
+  }
+
+  .card-actions .divider-v {
+    width: 1px;
+    background: #1a1a24;
+    flex-shrink: 0;
+  }
+
+  /* Highlighted card */
+  .poster-card.highlighted {
+    border-color: #87ceeb;
+    box-shadow: 0 0 0 2px rgba(135,206,235,0.3);
+  }
+
+  /* Toast */
+  .toast {
+    position: fixed;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%) translateY(20px);
+    background: #1a1a24;
+    border: 1px solid #333;
+    color: #e0e0e0;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-size: 0.8rem;
+    font-family: 'Inter', sans-serif;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.2s, transform 0.2s;
+    z-index: 200;
+  }
+
+  .toast.show {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+
+  /* Tooltip */
+  .tooltip {
+    position: fixed;
+    background: #1a1a24;
+    border: 1px solid #333;
+    border-radius: 10px;
+    padding: 0;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.15s;
+    z-index: 100;
+    width: 220px;
+    overflow: hidden;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.6);
+  }
+
+  .tooltip .tt-poster {
+    width: 100%;
+    height: 140px;
+    object-fit: cover;
+    display: block;
+    background: #111;
+  }
+
+  .tooltip .tt-body {
+    padding: 10px 12px;
+  }
+
+  .tooltip .tt-title {
+    font-weight: 600;
+    font-size: 0.85rem;
+    margin-bottom: 2px;
+    line-height: 1.2;
+  }
+
+  .tooltip .tt-year {
+    font-size: 0.7rem;
+    color: #666;
+    margin-bottom: 8px;
+  }
+
+  .tooltip .tt-palette {
+    display: flex;
+    gap: 3px;
+  }
+
+  .tooltip .tt-swatch {
+    flex: 1;
+    height: 24px;
+    border-radius: 3px;
+    border: 1px solid #333;
+  }
+
+  /* Hue wheel */
+  #hue-wheel {
+    display: flex;
+    justify-content: center;
+  }
+
+  /* Legend */
+  .legend {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    margin-top: 12px;
+    justify-content: center;
+  }
+
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.75rem;
+    color: #888;
+  }
+
+  .legend-swatch {
+    width: 12px;
+    height: 12px;
+    border-radius: 2px;
+  }
+
+  /* Era comparison */
+  .era-row {
+    display: flex;
+    align-items: center;
+    margin-bottom: 16px;
+    gap: 16px;
+  }
+
+  .era-label {
+    width: 80px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #aaa;
+    text-align: right;
+    flex-shrink: 0;
+  }
+
+  .era-palette {
+    display: flex;
+    flex: 1;
+    height: 48px;
+    border-radius: 6px;
+    overflow: hidden;
+  }
+
+  .era-palette div {
+    flex: 1;
+    transition: flex 0.3s;
+  }
+
+  .era-palette div:hover {
+    flex: 2;
+  }
+
+  .era-count {
+    font-size: 0.75rem;
+    color: #555;
+    width: 60px;
+    flex-shrink: 0;
+  }
+
+  /* Divider */
+  .divider {
+    max-width: 1200px;
+    margin: 0 auto;
+    border: none;
+    border-top: 1px solid #1a1a24;
+  }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar { height: 6px; width: 6px; }
+  ::-webkit-scrollbar-track { background: #0a0a0f; }
+  ::-webkit-scrollbar-thumb { background: #333; border-radius: 3px; }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    .hero h1 { font-size: 1.8rem; }
+    .hero .subtitle { font-size: 0.85rem; }
+    .hero { padding: 48px 16px 24px; }
+
+    .stats-bar { gap: 24px; padding: 16px 12px; }
+    .stat .num { font-size: 1.6rem; }
+    .stat .label { font-size: 0.65rem; }
+
+    .section { padding: 24px 12px; }
+    .section-title { font-size: 1.2rem; }
+    .section-desc { font-size: 0.8rem; }
+
+    .chart-container { padding: 12px 8px; }
+
+    .poster-grid {
+      grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+      gap: 8px;
+    }
+
+    .era-row {
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .era-label { width: 60px; font-size: 0.75rem; }
+    .era-count { width: 100%; text-align: center; }
+
+    .legend { gap: 10px; }
+    .legend-item { font-size: 0.65rem; }
+
+    .tooltip { width: 180px; }
+    .tooltip .tt-poster { height: 100px; }
+    .tooltip .tt-title { font-size: 0.8rem; }
+    .tooltip .tt-swatch { height: 20px; }
+  }
+
+  @media (max-width: 480px) {
+    .hero h1 { font-size: 1.4rem; }
+
+    .stats-bar { gap: 16px; }
+    .stat .num { font-size: 1.3rem; }
+
+    .poster-grid {
+      grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+      gap: 6px;
+    }
+
+    .poster-palette { height: 24px; }
+    .poster-info { padding: 6px 8px; }
+    .poster-info .title { font-size: 0.7rem; }
+
+    .card-actions button { font-size: 0.6rem; padding: 5px 0; }
+
+    .tooltip { width: 160px; }
+    .tooltip .tt-poster { height: 80px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <h1>SRK Poster Color Evolution</h1>
+  <p class="subtitle">97 films &middot; 1992–2026 &middot; CIELAB K-Means palette extraction</p>
+</div>
+
+<div class="stats-bar" id="stats-bar"></div>
+
+<div class="section">
+  <h2 class="section-title">Timeline</h2>
+  <p class="section-desc">Each block is a film's top 5 palette colors, ordered by year</p>
+  <div id="timeline-strip"></div>
+</div>
+
+<hr class="divider">
+
+<div class="section">
+  <h2 class="section-title">Average Palette by Era</h2>
+  <p class="section-desc">Colors averaged across all films in each 5-year era</p>
+  <div id="era-comparison"></div>
+</div>
+
+<hr class="divider">
+
+<div class="section">
+  <h2 class="section-title">Hue Distribution Over Time</h2>
+  <p class="section-desc">Stacked area showing how color families shift across decades</p>
+  <div class="chart-container">
+    <div id="hue-stacked"></div>
+  </div>
+</div>
+
+<hr class="divider">
+
+<div class="section">
+  <h2 class="section-title">Lightness & Saturation Trends</h2>
+  <p class="section-desc">Average L* and chroma per year with 3-year rolling mean</p>
+  <div class="chart-container">
+    <div id="ls-trends"></div>
+  </div>
+</div>
+
+<hr class="divider">
+
+<div class="section">
+  <h2 class="section-title">Color Wheel Heatmap</h2>
+  <p class="section-desc">All extracted colors plotted by hue angle and lightness</p>
+  <div id="hue-wheel"></div>
+</div>
+
+<hr class="divider">
+
+<div class="section">
+  <h2 class="section-title">All 97 Palettes</h2>
+  <p class="section-desc">Hover for details</p>
+  <div class="poster-grid" id="poster-grid"></div>
+</div>
+
+<div class="tooltip" id="tooltip">
+  <img class="tt-poster" src="" alt="">
+  <div class="tt-body">
+    <div class="tt-title"></div>
+    <div class="tt-year"></div>
+    <div class="tt-palette"></div>
+  </div>
+</div>
+
+<script>
+// ─── Data ──────────────────────────────────────────────
+const DATA = [{"title": "Chamatkar", "year": "1992", "poster": "1992_Chamatkar.jpg", "palette": ["#251c1a", "#50382d", "#c6c0bd", "#c67f53", "#a05234"]}, {"title": "Deewana", "year": "1992", "poster": "1992_Deewana.jpg", "palette": ["#29282e", "#c2dbd7", "#9ebcbd", "#413c40", "#cd9266"]}, {"title": "Dil Aashna Hai", "year": "1992", "poster": "1992_Dil Aashna Hai.jpg", "palette": ["#2e231f", "#f0e0c9", "#cc5740", "#8c4948", "#4f382b"]}, {"title": "Raju Ban Gaya Gentleman", "year": "1992", "poster": "1992_Raju Ban Gaya Gentleman.jpg", "palette": ["#ebe9eb", "#2a1720", "#cecddb", "#563436", "#535b77"]}, {"title": "Baazigar", "year": "1993", "poster": "1993_Baazigar.jpg", "palette": ["#0a0406", "#ecf4f2", "#c1cacc", "#50342e", "#69584f"]}, {"title": "Darr", "year": "1993", "poster": "1993_Darr.jpg", "palette": ["#0a070f", "#e8f1f1", "#dc5a3d", "#e38e7b", "#17203a"]}, {"title": "King Uncle", "year": "1993", "poster": "1993_King Uncle.jpg", "palette": ["#f1ede3", "#dacfcc", "#523e45", "#a5aec2", "#a08381"]}, {"title": "Maya Memsaab", "year": "1993", "poster": "1993_Maya Memsaab.jpg", "palette": ["#dde4da", "#59696c", "#56544f", "#775449", "#b4866a"]}, {"title": "Pehla Nasha", "year": "1993", "poster": "1993_Pehla Nasha.jpg", "palette": ["#2b2620", "#423531", "#f1e8c1", "#6a442f", "#7f664d"]}, {"title": "Anjaam", "year": "1994", "poster": "1994_Anjaam.jpg", "palette": ["#24211d", "#e9e3dc", "#4a2d29", "#a96f65", "#7e3833"]}, {"title": "Kabhi Haan Kabhi Naa", "year": "1994", "poster": "1994_Kabhi Haan Kabhi Naa.jpg", "palette": ["#2f2625", "#413a42", "#bc9d8c", "#ece5dd", "#dbc6b7"]}, {"title": "Dilwale Dulhania Le Jayenge", "year": "1995", "poster": "1995_Dilwale Dulhania Le Jayenge.jpg", "palette": ["#d5ced2", "#f5eee8", "#cf5647", "#6a8fb7", "#afb5c9"]}, {"title": "Guddu", "year": "1995", "poster": "1995_Guddu.jpg", "palette": ["#30285a", "#fbf8ee", "#1d1813", "#342b2f", "#e4cdb1"]}, {"title": "Karan Arjun", "year": "1995", "poster": "1995_Karan Arjun.jpg", "palette": ["#2a2221", "#47322e", "#a74332", "#af6d41", "#7c372c"]}, {"title": "Oh Darling! Yeh Hai India!", "year": "1995", "poster": "1995_Oh Darling! Yeh Hai India!.jpg", "palette": ["#e5e0db", "#e2b78f", "#c4bccc", "#3b3248", "#67aee4"]}, {"title": "Ram Jaane", "year": "1995", "poster": "1995_Ram Jaane.jpg", "palette": ["#302423", "#4f3530", "#7d4233", "#a95640", "#eaded0"]}, {"title": "Trimurti", "year": "1995", "poster": "1995_Trimurti.jpg", "palette": ["#bbd4ca", "#40353b", "#913f22", "#a06938", "#2a2525"]}, {"title": "Zamaana Deewana", "year": "1995", "poster": "1995_Zamaana Deewana.jpg", "palette": ["#1b1a1c", "#3a302e", "#e1cdcc", "#b9482f", "#f6f5ed"]}, {"title": "Army", "year": "1996", "poster": "1996_Army.jpg", "palette": ["#362629", "#22191c", "#513232", "#dcd5cc", "#6f4e4f"]}, {"title": "Chaahat", "year": "1996", "poster": "1996_Chaahat.jpg", "palette": ["#382d2b", "#b9603c", "#583c32", "#f8f6f2", "#e3722e"]}, {"title": "Dushman Duniya Ka", "year": "1996", "poster": "1996_Dushman Duniya Ka.jpg", "palette": ["#131517", "#e4aaa7", "#da8671", "#70423c", "#9d6a5e"]}, {"title": "English Babu Desi Mem", "year": "1996", "poster": "1996_English Babu Desi Mem.jpg", "palette": ["#faedd1", "#fcfdf9", "#23241c", "#c78856", "#383527"]}, {"title": "Dil To Pagal Hai", "year": "1997", "poster": "1997_Dil To Pagal Hai.jpg", "palette": ["#b5654c", "#debba9", "#021e65", "#933f3d", "#ede7ec"]}, {"title": "Gudgudee", "year": "1997", "poster": "1997_Gudgudee.jpg", "palette": ["#f4f1ef", "#dedadd", "#d2c3c1", "#db988e", "#b86357"]}, {"title": "Koyla", "year": "1997", "poster": "1997_Koyla.jpg", "palette": ["#0d0f16", "#212128", "#5c6b7d", "#415068", "#303746"]}, {"title": "Pardes", "year": "1997", "poster": "1997_Pardes.jpg", "palette": ["#372e27", "#1f1c1a", "#ea7d2f", "#bd562e", "#f3a939"]}, {"title": "Yes Boss", "year": "1997", "poster": "1997_Yes Boss.jpg", "palette": ["#0d120a", "#f1f2ee", "#202113", "#393420", "#baa88c"]}, {"title": "Achanak", "year": "1998", "poster": "1998_Achanak.jpg", "palette": ["#3c353a", "#f9f6f0", "#594d52", "#bc7a62", "#777481"]}, {"title": "Dil Se..", "year": "1998", "poster": "1998_Dil Se...jpg", "palette": ["#f5f6f4", "#0f0d08", "#c97a4d", "#a55e3f", "#372922"]}, {"title": "Duplicate", "year": "1998", "poster": "1998_Duplicate.jpg", "palette": ["#10130f", "#9ea7a3", "#2d2e29", "#a4241d", "#777d78"]}, {"title": "Kuch Kuch Hota Hai", "year": "1998", "poster": "1998_Kuch Kuch Hota Hai.jpg", "palette": ["#f7f5f1", "#554539", "#30251d", "#e78e5f", "#b04630"]}, {"title": "Baadshah", "year": "1999", "poster": "1999_Baadshah.jpg", "palette": ["#bd771a", "#ceab19", "#edefec", "#19171d", "#914a13"]}, {"title": "Gaja Gamini", "year": "2000", "poster": "2000_Gaja Gamini.jpg", "palette": ["#4a342d", "#ede4d8", "#71544c", "#271716", "#e89165"]}, {"title": "Har Dil Jo Pyar Karega", "year": "2000", "poster": "2000_Har Dil Jo Pyar Karega.jpg", "palette": ["#fafafa", "#ebe0eb", "#e959a7", "#332924", "#d3894d"]}, {"title": "Hey Ram", "year": "2000", "poster": "2000_Hey Ram.jpg", "palette": ["#999398", "#807d83", "#65626a", "#191010", "#b6aeb0"]}, {"title": "Josh", "year": "2000", "poster": "2000_Josh.jpg", "palette": ["#4a3e3e", "#fbf8f2", "#392c2d", "#f1d3c3", "#daaea0"]}, {"title": "Mohabbatein", "year": "2000", "poster": "2000_Mohabbatein.jpg", "palette": ["#fafcfa", "#cb7f5c", "#efd6b8", "#e8aa81", "#9d5f46"]}, {"title": "Phir Bhi Dil Hai Hindustani", "year": "2000", "poster": "2000_Phir Bhi Dil Hai Hindustani.jpg", "palette": ["#f6f9f8", "#cf7d37", "#322c27", "#f7b732", "#d1cdc0"]}, {"title": "A\u015boka", "year": "2001", "poster": "2001_A\u015boka.jpg", "palette": ["#f5f6f4", "#f6ac2e", "#58372a", "#332422", "#78503a"]}, {"title": "Kabhi Khushi Kabhie Gham", "year": "2001", "poster": "2001_Kabhi Khushi Kabhie Gham.jpg", "palette": ["#080b07", "#362c1f", "#221e17", "#912826", "#601e21"]}, {"title": "One 2 Ka 4", "year": "2001", "poster": "2001_One 2 Ka 4.jpg", "palette": ["#121013", "#282730", "#f6f6f6", "#49464d", "#9b96a7"]}, {"title": "Devdas", "year": "2002", "poster": "2002_Devdas.jpg", "palette": ["#861c1d", "#bc4a21", "#d66615", "#a42d1d", "#5e1c1b"]}, {"title": "Hum Tumhare Hain Sanam", "year": "2002", "poster": "2002_Hum Tumhare Hain Sanam.jpg", "palette": ["#020409", "#201d20", "#3f3130", "#dca485", "#c48567"]}, {"title": "Saathiya", "year": "2002", "poster": "2002_Saathiya.jpg", "palette": ["#b42c2d", "#ec4a33", "#2c1e19", "#f07433", "#f5a13a"]}, {"title": "Shakti  The Power", "year": "2002", "poster": "2002_Shakti_ The Power.jpg", "palette": ["#100d0e", "#371a16", "#f5d13a", "#672f22", "#f6f8f5"]}, {"title": "Chalte Chalte", "year": "2003", "poster": "2003_Chalte Chalte.jpg", "palette": ["#240805", "#cac4c3", "#b5a9a8", "#43241b", "#9c8b88"]}, {"title": "Kal Ho Naa Ho", "year": "2003", "poster": "2003_Kal Ho Naa Ho.jpg", "palette": ["#f7f6f4", "#dfd5cd", "#150e12", "#c0ada2", "#ac1b28"]}, {"title": "Main Hoon Na", "year": "2004", "poster": "2004_Main Hoon Na.jpg", "palette": ["#b8b2ac", "#cccbc7", "#e0e4e1", "#1a1d1c", "#36302d"]}, {"title": "Swades", "year": "2004", "poster": "2004_Swades.jpg", "palette": ["#4f91cd", "#6b9fd3", "#8eb3db", "#f5f6f8", "#c0ccdf"]}, {"title": "Veer-Zaara", "year": "2004", "poster": "2004_Veer-Zaara.jpg", "palette": ["#efd782", "#e2c574", "#472b22", "#d5ad67", "#754234"]}, {"title": "Yeh Lamhe Judaai Ke", "year": "2004", "poster": "2004_Yeh Lamhe Judaai Ke.jpg", "palette": ["#ca8044", "#1b1810", "#b44c1e", "#dde0e1", "#717ca3"]}, {"title": "Kaal", "year": "2005", "poster": "2005_Kaal.jpg", "palette": ["#030a0d", "#121b16", "#222e22", "#f5f9f6", "#3a4735"]}, {"title": "Kuchh Meetha Ho Jaye", "year": "2005", "poster": "2005_Kuchh Meetha Ho Jaye.jpg", "palette": ["#81a9b0", "#5a8184", "#b27e64", "#50514d", "#b8262e"]}, {"title": "Paheli", "year": "2005", "poster": "2005_Paheli.jpg", "palette": ["#981109", "#f0af7d", "#f6dfa8", "#621a15", "#9b4a34"]}, {"title": "Silsiilay", "year": "2005", "poster": "2005_Silsiilay.jpg", "palette": ["#f8f9f4", "#9c5839", "#dfc7bf", "#793e2d", "#fae46a"]}, {"title": "Alag", "year": "2006", "poster": "2006_Alag.jpg", "palette": ["#000204", "#081923", "#122e3b", "#377686", "#204653"]}, {"title": "Don  The Chase Begins Again", "year": "2006", "poster": "2006_Don_ The Chase Begins Again.jpg", "palette": ["#252b1c", "#373e26", "#4f5533", "#606e43", "#70884f"]}, {"title": "I See You", "year": "2006", "poster": "2006_I See You.jpg", "palette": ["#0e0706", "#b7a186", "#d3bfa6", "#a08567", "#eef1f0"]}, {"title": "Kabhi Alvida Naa Kehna", "year": "2006", "poster": "2006_Kabhi Alvida Naa Kehna.jpg", "palette": ["#769cc7", "#94b6db", "#131217", "#c5cfdb", "#587aa2"]}, {"title": "Chak De! India", "year": "2007", "poster": "2007_Chak De! India.jpg", "palette": ["#f5f5f1", "#6aaf69", "#8a6652", "#decfbd", "#534234"]}, {"title": "Heyy Babyy", "year": "2007", "poster": "2007_Heyy Babyy.jpg", "palette": ["#efeeec", "#b5a09a", "#d5cac4", "#e7df8d", "#cd733c"]}, {"title": "Om Shanti Om", "year": "2007", "poster": "2007_Om Shanti Om.jpg", "palette": ["#0c0204", "#330909", "#581617", "#84201a", "#c32c20"]}, {"title": "Bhoothnath", "year": "2008", "poster": "2008_Bhoothnath.jpg", "palette": ["#090711", "#105a97", "#3670a9", "#936262", "#be847b"]}, {"title": "Kismat Konnection", "year": "2008", "poster": "2008_Kismat Konnection.jpg", "palette": ["#5f492a", "#1b0f10", "#9d6e57", "#511e12", "#9c1e0f"]}, {"title": "Krazzy 4", "year": "2008", "poster": "2008_Krazzy 4.jpg", "palette": ["#cae1e3", "#f0f8f6", "#b4c7c5", "#9d9d91", "#5e5550"]}, {"title": "Rab Ne Bana Di Jodi", "year": "2008", "poster": "2008_Rab Ne Bana Di Jodi.jpg", "palette": ["#351e13", "#50361f", "#130708", "#724b2c", "#a17764"]}, {"title": "Shaurya", "year": "2008", "poster": "2008_Shaurya.jpg", "palette": ["#fcfcfc", "#160f1d", "#2d2631", "#e0d3d0", "#463d43"]}, {"title": "Billu", "year": "2009", "poster": "2009_Billu.jpg", "palette": ["#100a09", "#301c15", "#4c3121", "#edb885", "#f1e5c5"]}, {"title": "Luck by Chance", "year": "2009", "poster": "2009_Luck by Chance.jpg", "palette": ["#fafafa", "#1a1614", "#bc8778", "#563227", "#a33a32"]}, {"title": "Don 2", "year": "2010", "poster": "2010_Don 2.jpg", "palette": ["#13161b", "#3f464e", "#5a6066", "#292b32", "#767c82"]}, {"title": "Dulha Mil Gaya", "year": "2010", "poster": "2010_Dulha Mil Gaya.jpg", "palette": ["#f0cf20", "#e0ae14", "#22140e", "#f3df7d", "#bc8537"]}, {"title": "Love Breakups Zindagi", "year": "2010", "poster": "2010_Love Breakups Zindagi.jpg", "palette": ["#f5f8f7", "#e1ddd6", "#1c1414", "#cbb6b3", "#41312d"]}, {"title": "My Name Is Khan", "year": "2010", "poster": "2010_My Name Is Khan.jpg", "palette": ["#171210", "#572b1b", "#301d17", "#79351c", "#cc7426"]}, {"title": "Ra.One", "year": "2010", "poster": "2010_Ra.One.jpg", "palette": ["#080c11", "#193255", "#194a7a", "#0e1b34", "#69a7c8"]}, {"title": "Shahrukh Bola  Khoobsurat Hai Tu ", "year": "2010", "poster": "2010_Shahrukh Bola _Khoobsurat Hai Tu_.jpg", "palette": ["#f2f6f7", "#c4e6f9", "#938371", "#f6d0b1", "#6b5c4e"]}, {"title": "Jab Tak Hai Jaan", "year": "2012", "poster": "2012_Jab Tak Hai Jaan.jpg", "palette": ["#b9784f", "#dfc6a6", "#ceb18a", "#c2966b", "#70503c"]}, {"title": "Bombay Talkies", "year": "2013", "poster": "2013_Bombay Talkies.jpg", "palette": ["#150409", "#351718", "#5d2c1b", "#b89055", "#6c6340"]}, {"title": "Chennai Express", "year": "2013", "poster": "2013_Chennai Express.jpg", "palette": ["#72381d", "#ecc456", "#c89e43", "#9d854c", "#402e1a"]}, {"title": "Bhoothnath Returns", "year": "2014", "poster": "2014_Bhoothnath Returns.jpg", "palette": ["#a5c1b5", "#7d847d", "#9ea094", "#d7e3d4", "#636b65"]}, {"title": "Happy New Year", "year": "2014", "poster": "2014_Happy New Year.jpg", "palette": ["#1e1314", "#7d5037", "#d09846", "#ab703c", "#dcbf7f"]}, {"title": "Dilwale", "year": "2015", "poster": "2015_Dilwale.jpg", "palette": ["#0b0b0b", "#2b1e1c", "#4b2b26", "#ba896e", "#d6b294"]}, {"title": "Ae Dil Hai Mushkil", "year": "2016", "poster": "2016_Ae Dil Hai Mushkil.jpg", "palette": ["#371314", "#1e0506", "#51231f", "#8e5a4c", "#a77a6d"]}, {"title": "Dear Zindagi", "year": "2016", "poster": "2016_Dear Zindagi.jpg", "palette": ["#eedace", "#ddbfb9", "#bea7af", "#311c1b", "#9c8891"]}, {"title": "Fan", "year": "2016", "poster": "2016_Fan.jpg", "palette": ["#170613", "#be2e1e", "#5b0b0f", "#120c4c", "#e3dcd6"]}, {"title": "Jab Harry Met Sejal", "year": "2017", "poster": "2017_Jab Harry Met Sejal.jpg", "palette": ["#f4ebcc", "#200706", "#e7a47d", "#c0754f", "#4c2216"]}, {"title": "Raees", "year": "2017", "poster": "2017_Raees.jpg", "palette": ["#41423b", "#6d6747", "#e1deb8", "#9f9255", "#b3a859"]}, {"title": "Tubelight", "year": "2017", "poster": "2017_Tubelight.jpg", "palette": ["#605643", "#776b57", "#483f2f", "#998565", "#d1cfbd"]}, {"title": "Zero", "year": "2018", "poster": "2018_Zero.jpg", "palette": ["#534739", "#41372b", "#655645", "#26241d", "#7c6c59"]}, {"title": "The Zoya Factor", "year": "2019", "poster": "2019_The Zoya Factor.jpg", "palette": ["#162431", "#333f46", "#366080", "#6a879d", "#a88a6d"]}, {"title": "Brahm\u0101stra  Part One \u2013 Shiva", "year": "2022", "poster": "2022_Brahm\u0101stra_ Part One \u2013 Shiva.jpg", "palette": ["#ac6025", "#ca8137", "#844c22", "#dea95b", "#2e1e14"]}, {"title": "Laal Singh Chaddha", "year": "2022", "poster": "2022_Laal Singh Chaddha.jpg", "palette": ["#d9e6f8", "#d1ccd7", "#baadba", "#a4c9f1", "#a18d9c"]}, {"title": "Rocketry  The Nambi Effect", "year": "2022", "poster": "2022_Rocketry_ The Nambi Effect.jpg", "palette": ["#0d0202", "#300a0a", "#58110d", "#8a2516", "#db9c7e"]}, {"title": "Dunki", "year": "2023", "poster": "2023_Dunki.jpg", "palette": ["#d6be98", "#a1b3af", "#bcc8c7", "#e1d9c9", "#bf9f76"]}, {"title": "Jawan", "year": "2023", "poster": "2023_Jawan.jpg", "palette": ["#080c11", "#102027", "#11353f", "#174d58", "#326570"]}, {"title": "Pathaan", "year": "2023", "poster": "2023_Pathaan.jpg", "palette": ["#aec4c7", "#81a4ac", "#130f10", "#e4e0d0", "#3b2d2e"]}, {"title": "Tiger 3", "year": "2023", "poster": "2023_Tiger 3.jpg", "palette": ["#1b4d4f", "#123032", "#0a1216", "#1f6f6f", "#d9d9c7"]}, {"title": "King", "year": "2026", "poster": "2026_King.jpg", "palette": ["#772622", "#d7e8ec", "#4e362a", "#25201a", "#9bc3cf"]}];
+
+// ─── Helpers ───────────────────────────────────────────
+const parseHex = hex => {
+  const r = parseInt(hex.slice(1, 3), 16);
+  const g = parseInt(hex.slice(3, 5), 16);
+  const b = parseInt(hex.slice(5, 7), 16);
+  return [r, g, b];
+};
+
+const rgbToHsl = (r, g, b) => {
+  r /= 255; g /= 255; b /= 255;
+  const max = Math.max(r, g, b), min = Math.min(r, g, b);
+  let h, s, l = (max + min) / 2;
+  if (max === min) { h = s = 0; }
+  else {
+    const d = max - min;
+    s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+    switch (max) {
+      case r: h = ((g - b) / d + (g < b ? 6 : 0)) / 6; break;
+      case g: h = ((b - r) / d + 2) / 6; break;
+      case b: h = ((r - g) / d + 4) / 6; break;
+    }
+  }
+  return [h * 360, s * 100, l * 100];
+};
+
+const rgbToLab = (r, g, b) => {
+  let [rl, gl, bl] = [r, g, b].map(c => {
+    c /= 255;
+    return c > 0.04045 ? Math.pow((c + 0.055) / 1.055, 2.4) : c / 12.92;
+  });
+  let x = (rl * 0.4124564 + gl * 0.3575761 + bl * 0.1804375) / 0.95047;
+  let y = rl * 0.2126729 + gl * 0.7151522 + bl * 0.0721750;
+  let z = (rl * 0.0193339 + gl * 0.1191920 + bl * 0.9503041) / 1.08883;
+  const f = t => t > 0.008856 ? Math.cbrt(t) : 7.787 * t + 16 / 116;
+  return [116 * f(y) - 16, 500 * (f(x) - f(y)), 200 * (f(y) - f(z))];
+};
+
+const hueFamily = h => {
+  if (h < 15 || h >= 345) return 'Red';
+  if (h < 45) return 'Orange';
+  if (h < 75) return 'Yellow';
+  if (h < 150) return 'Green';
+  if (h < 195) return 'Cyan';
+  if (h < 255) return 'Blue';
+  if (h < 285) return 'Purple';
+  if (h < 345) return 'Pink';
+  return 'Red';
+};
+
+const HUE_FAMILIES = ['Red', 'Orange', 'Yellow', 'Green', 'Cyan', 'Blue', 'Purple', 'Pink'];
+const HUE_COLORS = ['#e74c3c', '#e67e22', '#f1c40f', '#2ecc71', '#1abc9c', '#3498db', '#9b59b6', '#e91e63'];
+
+const tooltip = d3.select('#tooltip');
+
+// ─── Stats Bar ─────────────────────────────────────────
+const years = [...new Set(DATA.map(d => d.year))].sort();
+const totalFilms = DATA.length;
+const yearSpan = `${years[0]}–${years[years.length - 1]}`;
+const allColors = DATA.flatMap(d => d.palette);
+const uniqueColors = new Set(allColors).size;
+
+// Average saturation & lightness
+const avgStats = (() => {
+  let totalS = 0, totalL = 0, count = 0;
+  DATA.forEach(d => d.palette.forEach(hex => {
+    const [r, g, b] = parseHex(hex);
+    const [, s, l] = rgbToHsl(r, g, b);
+    totalS += s; totalL += l; count++;
+  }));
+  return { sat: (totalS / count).toFixed(1), lit: (totalL / count).toFixed(1) };
+})();
+
+d3.select('#stats-bar').html(`
+  <div class="stat"><div class="num">${totalFilms}</div><div class="label">Films</div></div>
+  <div class="stat"><div class="num">${yearSpan}</div><div class="label">Span</div></div>
+  <div class="stat"><div class="num">${uniqueColors}</div><div class="label">Unique Colors</div></div>
+  <div class="stat"><div class="num">${allColors.length}</div><div class="label">Total Swatches</div></div>
+  <div class="stat"><div class="num">${avgStats.sat}%</div><div class="label">Avg Saturation</div></div>
+  <div class="stat"><div class="num">${avgStats.lit}%</div><div class="label">Avg Lightness</div></div>
+`);
+
+// ─── Timeline Strip ────────────────────────────────────
+{
+  const W = 1200, H = 80, pad = 20;
+  const svg = d3.select('#timeline-strip').append('svg')
+    .attr('viewBox', `0 0 ${W} ${H}`)
+    .attr('width', '100%');
+
+  const x = d3.scaleBand()
+    .domain(DATA.map((_, i) => i))
+    .range([pad, W - pad])
+    .padding(0.15);
+
+  const blocks = svg.selectAll('g')
+    .data(DATA)
+    .join('g')
+    .attr('transform', (d, i) => `translate(${x(i)}, 0)`);
+
+  blocks.each(function(d, i) {
+    const g = d3.select(this);
+    const blockH = (H - 10) / d.palette.length;
+    d.palette.forEach((hex, j) => {
+      g.append('rect')
+        .attr('x', 0)
+        .attr('y', j * blockH + 2)
+        .attr('width', x.bandwidth())
+        .attr('height', blockH - 1)
+        .attr('rx', 1)
+        .attr('fill', hex);
+    });
+  });
+
+  blocks.on('mouseover', (event, d) => {
+    tooltip.style('opacity', 1);
+    tooltip.select('.tt-poster').attr('src', `srk/${d.poster}`).attr('alt', d.title);
+    tooltip.select('.tt-title').text(d.title);
+    tooltip.select('.tt-year').text(d.year);
+    tooltip.select('.tt-palette').html(
+      d.palette.map(c => `<div class="tt-swatch" style="background:${c}"></div>`).join('')
+    );
+  })
+  .on('mousemove', event => {
+    tooltip
+      .style('left', (event.clientX + 12) + 'px')
+      .style('top', (event.clientY - 10) + 'px');
+  })
+  .on('mouseout', () => tooltip.style('opacity', 0));
+
+  // Year labels
+  const yearGroups = d3.group(DATA, d => d.year);
+  let yearPositions = [];
+  yearGroups.forEach((films, year) => {
+    const indices = films.map(f => DATA.indexOf(f));
+    const mid = d3.mean(indices);
+    yearPositions.push({ year, x: x(mid) + x.bandwidth() / 2 });
+  });
+
+  svg.selectAll('.year-label')
+    .data(yearPositions)
+    .join('text')
+    .attr('class', 'year-label')
+    .attr('x', d => d.x)
+    .attr('y', H - 2)
+    .attr('text-anchor', 'middle')
+    .attr('font-size', '7px')
+    .attr('fill', '#444')
+    .attr('font-family', 'Inter')
+    .text(d => d.year);
+}
+
+// ─── Era Comparison ────────────────────────────────────
+{
+  const eras = [
+    { label: '1992–99', filter: d => +d.year >= 1992 && +d.year <= 1999 },
+    { label: '2000–05', filter: d => +d.year >= 2000 && +d.year <= 2005 },
+    { label: '2006–10', filter: d => +d.year >= 2006 && +d.year <= 2010 },
+    { label: '2011–17', filter: d => +d.year >= 2011 && +d.year <= 2017 },
+    { label: '2018–26', filter: d => +d.year >= 2018 && +d.year <= 2026 },
+  ];
+
+  const container = d3.select('#era-comparison');
+
+  eras.forEach(era => {
+    const films = DATA.filter(era.filter);
+    const allHex = films.flatMap(d => d.palette);
+    const rgbs = allHex.map(parseHex);
+
+    // Simple averaging in RGB space
+    const avgR = Math.round(d3.mean(rgbs, c => c[0]));
+    const avgG = Math.round(d3.mean(rgbs, c => c[1]));
+    const avgB = Math.round(d3.mean(rgbs, c => c[2]));
+
+    // Get top 5 representative colors via k-means-like approach
+    // Use the most frequent hue families instead
+    const hsls = rgbs.map(([r, g, b]) => rgbToHsl(r, g, b));
+    const hueCounts = {};
+    HUE_FAMILIES.forEach(f => hueCounts[f] = { count: 0, sumH: 0, sumS: 0, sumL: 0, sumR: 0, sumG: 0, sumB: 0 });
+    hsls.forEach(([h, s, l], i) => {
+      const family = hueFamily(h);
+      hueCounts[family].count++;
+      hueCounts[family].sumH += h;
+      hueCounts[family].sumS += s;
+      hueCounts[family].sumL += l;
+      hueCounts[family].sumR += rgbs[i][0];
+      hueCounts[family].sumG += rgbs[i][1];
+      hueCounts[family].sumB += rgbs[i][2];
+    });
+
+    const topFamilies = Object.entries(hueCounts)
+      .filter(([, v]) => v.count > 0)
+      .sort((a, b) => b[1].count - a[1].count)
+      .slice(0, 5);
+
+    const eraColors = topFamilies.map(([, v]) =>
+      `rgb(${Math.round(v.sumR / v.count)},${Math.round(v.sumG / v.count)},${Math.round(v.sumB / v.count)})`
+    );
+
+    // Fill remaining if less than 5
+    while (eraColors.length < 5) eraColors.push('rgb(30,30,40)');
+
+    const row = container.append('div').attr('class', 'era-row');
+    row.append('div').attr('class', 'era-label').text(era.label);
+
+    const palette = row.append('div').attr('class', 'era-palette');
+    eraColors.forEach(c => palette.append('div').style('background', c));
+
+    row.append('div').attr('class', 'era-count').text(`${films.length} films`);
+  });
+}
+
+// ─── Hue Stacked Area ──────────────────────────────────
+{
+  const W = 1160, H = 340, m = { t: 30, r: 30, b: 40, l: 50 };
+  const w = W - m.l - m.r, ht = H - m.t - m.b;
+
+  const svg = d3.select('#hue-stacked').append('svg')
+    .attr('viewBox', `0 0 ${W} ${H}`)
+    .attr('width', '100%');
+
+  const g = svg.append('g').attr('transform', `translate(${m.l},${m.t})`);
+
+  // Build year-family counts
+  const yearData = years.map(year => {
+    const films = DATA.filter(d => d.year === year);
+    const counts = {};
+    HUE_FAMILIES.forEach(f => counts[f] = 0);
+    films.forEach(d => d.palette.forEach(hex => {
+      const [r, b2, b_] = parseHex(hex);
+      const [h] = rgbToHsl(r, b2, b_);
+      counts[hueFamily(h)]++;
+    }));
+    const total = Object.values(counts).reduce((a, b) => a + b, 0);
+    const obj = { year };
+    HUE_FAMILIES.forEach(f => obj[f] = counts[f] / total * 100);
+    return obj;
+  });
+
+  const x = d3.scalePoint().domain(years).range([0, w]).padding(0.3);
+  const y = d3.scaleLinear().domain([0, 100]).range([ht, 0]);
+
+  const stack = d3.stack().keys(HUE_FAMILIES);
+  const series = stack(yearData);
+
+  const area = d3.area()
+    .x(d => x(d.data.year))
+    .y0(d => y(d[0]))
+    .y1(d => y(d[1]))
+    .curve(d3.curveBasis);
+
+  g.selectAll('path')
+    .data(series)
+    .join('path')
+    .attr('d', area)
+    .attr('fill', (d, i) => HUE_COLORS[i])
+    .attr('opacity', 0.7);
+
+  g.append('g')
+    .attr('transform', `translate(0,${ht})`)
+    .call(d3.axisBottom(x).tickValues(years.filter((_, i) => i % 3 === 0)))
+    .selectAll('text')
+    .attr('fill', '#555')
+    .attr('font-size', '10px');
+
+  g.append('g')
+    .call(d3.axisLeft(y).ticks(5).tickFormat(d => d + '%'))
+    .selectAll('text')
+    .attr('fill', '#555')
+    .attr('font-size', '10px');
+
+  g.selectAll('.domain, .tick line').attr('stroke', '#222');
+
+  // Legend
+  const legend = d3.select('#hue-stacked').append('div').attr('class', 'legend');
+  HUE_FAMILIES.forEach((f, i) => {
+    legend.append('div').attr('class', 'legend-item')
+      .html(`<div class="legend-swatch" style="background:${HUE_COLORS[i]}"></div>${f}`);
+  });
+}
+
+// ─── Lightness & Saturation Trends ─────────────────────
+{
+  const W = 1160, H = 340, m = { t: 30, r: 80, b: 40, l: 50 };
+  const w = W - m.l - m.r, ht = H - m.t - m.b;
+
+  const svg = d3.select('#ls-trends').append('svg')
+    .attr('viewBox', `0 0 ${W} ${H}`)
+    .attr('width', '100%');
+
+  const g = svg.append('g').attr('transform', `translate(${m.l},${m.t})`);
+
+  // Per-year average L* and chroma
+  const yearStats = years.map(year => {
+    const films = DATA.filter(d => d.year === year);
+    let totalL = 0, totalC = 0, count = 0;
+    films.forEach(d => d.palette.forEach(hex => {
+      const [r, gb, b] = parseHex(hex);
+      const [, a, b_] = rgbToLab(r, gb, b);
+      totalL += rgbToLab(r, gb, b)[0];
+      totalC += Math.sqrt(a * a + b_ * b_);
+      count++;
+    }));
+    return { year, lightness: totalL / count, chroma: totalC / count };
+  });
+
+  // Rolling mean
+  const rolling = (arr, key, window = 3) => {
+    const result = [];
+    arr.forEach((d, i) => {
+      const start = Math.max(0, i - Math.floor(window / 2));
+      const end = Math.min(arr.length, i + Math.ceil(window / 2));
+      const slice = arr.slice(start, end);
+      result.push({ year: d.year, [key]: d3.mean(slice, s => s[key]) });
+    });
+    return result;
+  };
+
+  const lRolling = rolling(yearStats, 'lightness');
+  const cRolling = rolling(yearStats, 'chroma');
+
+  const x = d3.scalePoint().domain(years).range([0, w]).padding(0.3);
+  const yL = d3.scaleLinear().domain([0, 100]).range([ht, 0]);
+  const yC = d3.scaleLinear().domain([0, 80]).range([ht, 0]);
+
+  // L* line
+  const lineL = d3.line().x(d => x(d.year)).y(d => yL(d.lightness)).curve(d3.curveBasis);
+  const lineC = d3.line().x(d => x(d.year)).y(d => yC(d.chroma)).curve(d3.curveBasis);
+
+  // Dots
+  g.selectAll('.dot-l')
+    .data(yearStats)
+    .join('circle')
+    .attr('cx', d => x(d.year))
+    .attr('cy', d => yL(d.lightness))
+    .attr('r', 3)
+    .attr('fill', '#87ceeb')
+    .attr('opacity', 0.5);
+
+  g.selectAll('.dot-c')
+    .data(yearStats)
+    .join('circle')
+    .attr('cx', d => x(d.year))
+    .attr('cy', d => yC(d.chroma))
+    .attr('r', 3)
+    .attr('fill', '#ffa07a')
+    .attr('opacity', 0.5);
+
+  // Rolling lines
+  g.append('path').datum(lRolling)
+    .attr('fill', 'none').attr('stroke', '#87ceeb').attr('stroke-width', 2.5)
+    .attr('d', lineL);
+
+  g.append('path').datum(cRolling)
+    .attr('fill', 'none').attr('stroke', '#ffa07a').attr('stroke-width', 2.5)
+    .attr('d', lineC);
+
+  // Axes
+  g.append('g')
+    .attr('transform', `translate(0,${ht})`)
+    .call(d3.axisBottom(x).tickValues(years.filter((_, i) => i % 3 === 0)))
+    .selectAll('text').attr('fill', '#555').attr('font-size', '10px');
+
+  g.append('g')
+    .call(d3.axisLeft(yL).ticks(5))
+    .selectAll('text').attr('fill', '#87ceeb').attr('font-size', '10px');
+
+  g.append('g')
+    .attr('transform', `translate(${w},0)`)
+    .call(d3.axisRight(yC).ticks(5))
+    .selectAll('text').attr('fill', '#ffa07a').attr('font-size', '10px');
+
+  g.selectAll('.domain, .tick line').attr('stroke', '#222');
+
+  // Labels
+  g.append('text').attr('x', -10).attr('y', -10)
+    .attr('fill', '#87ceeb').attr('font-size', '11px').text('L* (Lightness)');
+  g.append('text').attr('x', w + 10).attr('y', -10)
+    .attr('fill', '#ffa07a').attr('font-size', '11px').attr('text-anchor', 'end').text('Chroma');
+
+  // Legend
+  const legend = d3.select('#ls-trends').append('div').attr('class', 'legend');
+  legend.append('div').attr('class', 'legend-item')
+    .html(`<div class="legend-swatch" style="background:#87ceeb"></div>Lightness (L*)`);
+  legend.append('div').attr('class', 'legend-item')
+    .html(`<div class="legend-swatch" style="background:#ffa07a"></div>Chroma (Saturation)`);
+}
+
+// ─── Color Wheel Heatmap ───────────────────────────────
+{
+  const W = 560, H = 560;
+  const cx = W / 2, cy = H / 2, R = 220;
+
+  const svg = d3.select('#hue-wheel').append('svg')
+    .attr('viewBox', `0 0 ${W} ${H}`)
+    .attr('width', '100%')
+    .attr('max-width', '560px')
+    .style('margin', '0 auto');
+
+  // Background circle
+  svg.append('circle')
+    .attr('cx', cx).attr('cy', cy).attr('r', R + 20)
+    .attr('fill', '#111118').attr('stroke', '#1a1a24');
+
+  // Hue ring
+  const hueRes = 360;
+  for (let i = 0; i < hueRes; i++) {
+    const a1 = (i / hueRes) * Math.PI * 2 - Math.PI / 2;
+    const a2 = ((i + 1.5) / hueRes) * Math.PI * 2 - Math.PI / 2;
+    const arc = d3.arc()
+      .innerRadius(R - 15)
+      .outerRadius(R)
+      .startAngle(a1 + Math.PI / 2)
+      .endAngle(a2 + Math.PI / 2);
+    svg.append('path')
+      .attr('d', arc())
+      .attr('transform', `translate(${cx},${cy})`)
+      .attr('fill', `hsl(${i}, 80%, 60%)`)
+      .attr('opacity', 0.3);
+  }
+
+  // Plot dots
+  const dots = [];
+  DATA.forEach(d => d.palette.forEach(hex => {
+    const [r, g, b] = parseHex(hex);
+    const [h, s, l] = rgbToHsl(r, g, b);
+    dots.push({ h, s, l, hex, title: d.title, year: d.year, poster: d.poster });
+  }));
+
+  const rScale = d3.scaleLinear().domain([0, 100]).range([0, R - 30]);
+
+  svg.selectAll('circle.dot')
+    .data(dots)
+    .join('circle')
+    .attr('class', 'dot')
+    .attr('cx', d => cx + rScale(d.s) * Math.cos((d.h - 90) * Math.PI / 180))
+    .attr('cy', d => cy + rScale(d.s) * Math.sin((d.h - 90) * Math.PI / 180))
+    .attr('r', d => 2 + d.l / 40)
+    .attr('fill', d => d.hex)
+    .attr('stroke', '#0a0a0f')
+    .attr('stroke-width', 0.5)
+    .attr('opacity', 0.7)
+    .on('mouseover', (event, d) => {
+      tooltip.style('opacity', 1);
+      tooltip.select('.tt-poster').attr('src', `srk/${d.poster}`).attr('alt', d.title);
+      tooltip.select('.tt-title').text(d.title);
+      tooltip.select('.tt-year').text(`${d.year} · ${d.hex}`);
+      tooltip.select('.tt-palette').html(
+        `<div class="tt-swatch" style="background:${d.hex}"></div>`
+      );
+    })
+    .on('mousemove', event => {
+      tooltip
+        .style('left', (event.clientX + 12) + 'px')
+        .style('top', (event.clientY - 10) + 'px');
+    })
+    .on('mouseout', () => tooltip.style('opacity', 0));
+
+  // Center label
+  svg.append('text')
+    .attr('x', cx).attr('y', cy - 6)
+    .attr('text-anchor', 'middle')
+    .attr('fill', '#444')
+    .attr('font-size', '11px')
+    .attr('font-family', 'Inter')
+    .text('SATURATION →');
+  svg.append('text')
+    .attr('x', cx).attr('y', cy + 10)
+    .attr('text-anchor', 'middle')
+    .attr('fill', '#444')
+    .attr('font-size', '11px')
+    .attr('font-family', 'Inter')
+    .text('← HUE ANGLE →');
+}
+
+// ─── Poster Grid ───────────────────────────────────────
+{
+  const grid = d3.select('#poster-grid');
+
+  DATA.forEach(d => {
+    const card = grid.append('div').attr('class', 'poster-card');
+
+    card.append('img')
+      .attr('class', 'poster-thumb')
+      .attr('src', `srk/${d.poster}`)
+      .attr('alt', d.title)
+      .attr('loading', 'lazy');
+
+    const palette = card.append('div').attr('class', 'poster-palette');
+    d.palette.forEach(hex => palette.append('div').style('background', hex));
+
+    const info = card.append('div').attr('class', 'poster-info');
+    info.append('div').attr('class', 'year').text(d.year);
+    info.append('div').attr('class', 'title').text(d.title);
+
+    card.on('mouseover', event => {
+      tooltip.style('opacity', 1);
+      tooltip.select('.tt-poster').attr('src', `srk/${d.poster}`).attr('alt', d.title);
+      tooltip.select('.tt-title').text(d.title);
+      tooltip.select('.tt-year').text(d.year);
+      tooltip.select('.tt-palette').html(
+        d.palette.map(c => `<div class="tt-swatch" style="background:${c}"></div>`).join('')
+      );
+    })
+    .on('mousemove', event => {
+      tooltip
+        .style('left', (event.clientX + 12) + 'px')
+        .style('top', (event.clientY - 10) + 'px');
+    })
+    .on('mouseout', () => tooltip.style('opacity', 0));
+  });
+}
+</script>
+</body>
+</html>
