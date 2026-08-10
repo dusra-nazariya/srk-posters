@@ -2,7 +2,7 @@
 
 A data-viz essay by **Dusra Nazariya** tracing the color identity of Shah Rukh Khan's filmography through CIELAB K-Means palettes extracted from all 69 poster artworks (1992–2026).
 
-![SRK poster mosaic](static/images/SRK_Posters.png =1500x1000)
+![SRK poster mosaic](static/images/SRK_Posters.png)
 
 ## What it shows
 
