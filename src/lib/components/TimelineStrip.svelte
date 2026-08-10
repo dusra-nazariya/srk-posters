@@ -1,5 +1,6 @@
 <script>
 	import { films } from '$lib/data/colors.js';
+	import { filmSlug } from '$lib/data/slugs.js';
 	import { scaleBand } from 'd3';
 	import { showTooltip, hideTooltip } from './tooltip.js';
 
@@ -47,7 +48,7 @@
 <div
 	bind:this={container}
 	bind:clientWidth={width}
-	class="overflow-x-auto rounded-xl border border-line bg-surface p-3"
+	class="hidden overflow-x-auto rounded-xl border border-line bg-surface p-3 sm:block"
 	onmouseleave={hideTooltip}
 >
 	<svg viewBox="0 0 {width} {H}" width="100%" height={H} role="img" aria-label="Color timeline of all films">
@@ -84,4 +85,26 @@
 			</text>
 		{/each}
 	</svg>
+</div>
+
+<div class="sm:hidden">
+	<div class="overflow-x-auto rounded-xl border border-line bg-surface p-3">
+		<div class="flex w-max items-end gap-1.5">
+			{#each films as d, i}
+				<div class="flex flex-col items-center gap-1">
+					<a
+						href={`/films/${filmSlug(d)}`}
+						class="flex flex-col overflow-hidden rounded-md border border-fg/10 transition-transform active:scale-95"
+					>
+						{#each d.palette as hex, j}
+							<div style="background: {hex}" class="h-8 w-8 {j > 0 ? 'border-t border-ink/40' : ''}"></div>
+						{/each}
+					</a>
+					{#if i === 0 || d.year !== films[i - 1].year}
+						<span class="text-[9px] leading-none text-faint">{d.year}</span>
+					{/if}
+				</div>
+			{/each}
+		</div>
+	</div>
 </div>

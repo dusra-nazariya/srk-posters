@@ -26,18 +26,20 @@
 />
 
 <!-- Hero -->
-<section class="relative flex min-h-[88vh] flex-col items-center justify-center overflow-hidden px-4 pt-16 text-center">
+<section class="relative flex min-h-[100svh] flex-col items-center justify-center overflow-hidden px-4 pb-14 pt-24 text-center">
 	<img
 		src="/images/SRK_Posters.png"
 		alt=""
 		aria-hidden="true"
-		class="pointer-events-none absolute inset-0 h-full w-full object-cover opacity-45"
+		class="pointer-events-none absolute inset-0 h-full w-full object-cover object-center opacity-45"
 	/>
-	<div class="relative z-10 flex flex-col items-center">
-		<div
-			class="mt-8 rounded-2xl border border-fg/10 bg-ink/40 px-6 py-4 backdrop-blur-sm sm:px-10 sm:py-6"
-		>
-			<h1 class="max-w-4xl font-display text-4xl font-bold text-brand sm:text-6xl">
+	<div
+		class="pointer-events-none absolute inset-x-0 bottom-0 h-36 bg-gradient-to-t from-ink/90 via-ink/40 to-transparent"
+		aria-hidden="true"
+	></div>
+	<div class="relative z-10 flex w-full flex-col items-center">
+		<div class="mt-4 rounded-2xl border border-fg/10 bg-ink/40 px-5 py-4 backdrop-blur-sm sm:px-10 sm:py-6">
+			<h1 class="max-w-4xl font-display text-[2rem] font-bold leading-tight text-brand sm:text-6xl">
 				SRK: A Poster Palette
 			</h1>
 		</div>
@@ -49,7 +51,7 @@
 		</p>
 		<a
 			href="#timeline"
-			class="mt-10 inline-flex items-center gap-2 rounded-full border border-line bg-surface px-5 py-2.5 text-xs text-muted transition-colors hover:border-fg/25 hover:text-fg"
+			class="mt-9 inline-flex items-center gap-2 rounded-full border border-fg/15 bg-ink/70 px-5 py-2.5 text-xs text-soft backdrop-blur-md transition-colors hover:border-fg/30 hover:text-fg"
 		>
 			Scroll to explore
 			<svg width="12" height="12" viewBox="0 0 12 12" fill="none">
