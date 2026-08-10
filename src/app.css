@@ -1,0 +1,91 @@
+@import url('https://fonts.googleapis.com/css2?family=Eczar:wght@400;500;600;700&family=Fira+Sans:wght@300;400;500;600;700&display=swap');
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+:root {
+	color-scheme: light;
+	--tw-ink: #f4f4f8;
+	--tw-surface: #ffffff;
+	--tw-panel: #ebebf2;
+	--tw-line: #e0e0e8;
+	--tw-faint: #7a7a85;
+	--tw-muted: #494952;
+	--tw-soft: #20202a;
+	--tw-fg: #16161d;
+}
+
+.dark {
+	color-scheme: dark;
+	--tw-ink: #171722;
+	--tw-surface: #1e1e2c;
+	--tw-panel: #262636;
+	--tw-line: #32323f;
+	--tw-faint: #8a8a96;
+	--tw-muted: #a5a5b0;
+	--tw-soft: #d9d9e3;
+	--tw-fg: #ececf4;
+}
+
+@theme inline {
+	--font-display: "Eczar", serif;
+	--font-sans: "Fira Sans", ui-sans-serif, system-ui, sans-serif;
+
+	--color-ink: var(--tw-ink);
+	--color-surface: var(--tw-surface);
+	--color-panel: var(--tw-panel);
+	--color-line: var(--tw-line);
+	--color-faint: var(--tw-faint);
+	--color-muted: var(--tw-muted);
+	--color-soft: var(--tw-soft);
+	--color-fg: var(--tw-fg);
+	--color-brand: #ffa600;
+
+	--color-sky: #87ceeb;
+	--color-peach: #ffa07a;
+	--color-red: #e74c3c;
+	--color-orange: #e67e22;
+	--color-yellow: #f1c40f;
+	--color-green: #2ecc71;
+	--color-cyan: #1abc9c;
+	--color-blue: #3498db;
+	--color-purple: #9b59b6;
+	--color-pink: #e91e63;
+}
+
+@layer base {
+	html {
+		scroll-behavior: smooth;
+	}
+
+	body {
+		@apply bg-ink font-sans text-fg antialiased;
+		overflow-x: hidden;
+	}
+
+	::selection {
+		background: #ffa600;
+		color: #0a0a0f;
+	}
+
+	::-webkit-scrollbar {
+		height: 8px;
+		width: 8px;
+	}
+	::-webkit-scrollbar-track {
+		background: var(--tw-ink);
+	}
+	::-webkit-scrollbar-thumb {
+		background: var(--tw-line);
+		border-radius: 4px;
+	}
+}
+
+@layer utilities {
+	.text-gradient-hero {
+		background: linear-gradient(135deg, #ff6b6b, #ffa07a, #ffd700, #98fb98, #87ceeb, #dda0dd);
+		-webkit-background-clip: text;
+		background-clip: text;
+		-webkit-text-fill-color: transparent;
+	}
+}
